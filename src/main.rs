@@ -1,3 +1,5 @@
+use print_dancing_letters::run;
+
 fn main() {
-    println!("Hello, world!");
+    run();
 }

@@ -6,11 +6,13 @@ pub fn run() {
             "-i",
             "characters/a.gif",
             "-i",
-            "characters/a.gif",
+            "characters/b.gif",
             "-i",
-            "characters/a.gif",
+            "characters/c.gif",
+            "-i",
+            "characters/d.gif",
             "-filter_complex",
-            "[0][1][2]hstack=inputs=3,split[x][y];[x]palettegen[pal];[y][pal]paletteuse",
+            "[0][1][2][3]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0",
             "outputs/output.gif",
         ])
         .output()

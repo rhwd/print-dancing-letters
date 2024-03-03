@@ -3,21 +3,19 @@ use std::fs;
 use std::process::Command;
 
 pub fn run(arg: &String) {
-    parse_arg(&arg);
+    let char_commands = parse_arg(&arg);
+    let ffmpeg_command = vec![
+        char_commands,
+        vec![
+            "-filter_complex".to_string(),
+            "[0][1][2][3]hstack=inputs=4,split[x][y];[x]palettegen[pal];[y][pal]paletteuse"
+                .to_string(),
+            "outputs/output.gif".to_string(),
+        ],
+    ]
+    .concat();
     let output = Command::new("ffmpeg")
-        .args(&[
-            "-i",
-            "characters/a.gif",
-            "-i",
-            "characters/b.gif",
-            "-i",
-            "characters/c.gif",
-            "-i",
-            "characters/d.gif",
-            "-filter_complex",
-            "[0][1][2][3]xstack=inputs=4:layout=0_0|w0_0|0_h0|w0_h0",
-            "outputs/output.gif",
-        ])
+        .args(&ffmpeg_command)
         .output()
         .expect("Failed to execute ffmpeg");
 
@@ -29,13 +27,14 @@ pub fn run(arg: &String) {
     }
 }
 
-fn parse_arg(arg: &String) {
+fn parse_arg(arg: &String) -> Vec<String> {
     let char_paths = parse_chars_json();
-    let mut chars: Vec<u8> = Vec::new();
+    let mut chars: Vec<String> = Vec::new();
     for byte in arg.bytes() {
-        println!("{}", byte);
-        chars.push(byte)
+        chars.push("-i".to_string());
+        chars.push(char_paths[&byte].clone())
     }
+    chars
 }
 
 fn parse_chars_json() -> HashMap<u8, String> {

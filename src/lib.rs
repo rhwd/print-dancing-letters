@@ -28,8 +28,9 @@ pub fn run(arg: &String) {
 }
 
 fn parse_arg(arg: &String) {
-    let mut chars: Vec<char> = Vec::new();
-    for char in arg.chars() {
-        chars.push(char)
+    let mut chars: Vec<u8> = Vec::new();
+    for byte in arg.bytes() {
+        println!("{}", byte);
+        chars.push(byte)
     }
 }

@@ -1,6 +1,7 @@
 use std::process::Command;
 
-pub fn run() {
+pub fn run(arg: &String) {
+    parse_arg(&arg);
     let output = Command::new("ffmpeg")
         .args(&[
             "-i",
@@ -23,5 +24,12 @@ pub fn run() {
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr);
         eprintln!("Error running ffmpeg: {}", stderr);
+    }
+}
+
+fn parse_arg(arg: &String) {
+    let mut chars: Vec<char> = Vec::new();
+    for char in arg.chars() {
+        chars.push(char)
     }
 }

@@ -2,9 +2,10 @@ use std::collections::HashMap;
 use std::fs;
 use std::process::Command;
 
-pub fn run(arg: &String) {
-    let (chars, size) = parse_arg(&arg);
+pub fn run(input: &String) {
+    let (chars, size) = parse_input(&input);
     let ffmpeg_command = generate_ffmpeg_command(chars, size);
+
     let output = Command::new("ffmpeg")
         .args(&ffmpeg_command)
         .output()
@@ -18,14 +19,14 @@ pub fn run(arg: &String) {
     }
 }
 
-fn parse_arg(arg: &String) -> (Vec<String>, usize) {
+fn parse_input(input: &String) -> (Vec<String>, usize) {
     let char_paths = parse_chars_json();
     let mut chars: Vec<String> = Vec::new();
-    for byte in arg.bytes() {
+    for byte in input.bytes() {
         chars.push("-i".to_string());
         chars.push(char_paths[&byte].clone())
     }
-    (chars, arg.bytes().len())
+    (chars, input.bytes().len())
 }
 
 fn parse_chars_json() -> HashMap<u8, String> {

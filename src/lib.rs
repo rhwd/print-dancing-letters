@@ -2,9 +2,9 @@ use std::collections::HashMap;
 use std::fs;
 use std::process::Command;
 
-pub fn run(input: &String) {
+pub fn run(input: &String, file_name: &String) {
     let (chars, size) = parse_input(&input);
-    let ffmpeg_command = generate_ffmpeg_command(chars, size);
+    let ffmpeg_command = generate_ffmpeg_command(chars, size, file_name);
 
     let output = Command::new("ffmpeg")
         .args(&ffmpeg_command)
@@ -35,17 +35,18 @@ fn parse_chars_json() -> HashMap<u8, String> {
     json
 }
 
-fn generate_ffmpeg_command(chars: Vec<String>, size: usize) -> Vec<String> {
+fn generate_ffmpeg_command(chars: Vec<String>, size: usize, file_name: &String) -> Vec<String> {
     let filters: String = format!(
         "hstack=inputs={},split[x][y];[x]palettegen[pal];[y][pal]paletteuse",
         size
     );
-    let ffmpeg_command = vec![
+    let file_name_with_extension = format!("{}.gif", file_name);
+    let ffmpeg_command: Vec<String> = vec![
         chars,
         vec![
             "-filter_complex".to_string(),
             filters,
-            "outputs/output.gif".to_string(),
+            file_name_with_extension,
         ],
     ]
     .concat();

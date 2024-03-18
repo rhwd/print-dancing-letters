@@ -4,7 +4,7 @@ This Rust project allows you to print phrases onto dancing letters GIFs.
 
 ## Dependencies
 
-  You'll need ffmpeg installed.
+  You'll need [ffmpeg](https://ffmpeg.org/) installed.
 
 ## Installation
 
